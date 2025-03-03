@@ -7,7 +7,7 @@ create table main_application_raw_notifications (
     in_app_group_key varchar(255) not null,
     email_group_key varchar(255) not null,
     batch_notification_id int not null,
-    created_at timestamp not null default now(),
+    created_at timestamp not null default now()
 );
 
 -- notification service schema
@@ -54,7 +54,7 @@ create table batch_notifications (
     id serial primary key,
     notification_id int not null,
     created_at timestamp not null default now(),
-    user_notifications_created_at timestamp 
+    processed_at timestamp 
 );
 
 create table raw_notifications (
@@ -85,6 +85,7 @@ create table user_email_notifications (
     id serial primary key,
     user_id int not null,
     notification_id int not null,
+    sent_at timestamp,
     foreign key (user_id) references users(id),
-    foreign key (notification_id) references raw_notifications(id)
+    foreign key (notification_id) references raw_notifications(id),
 );
