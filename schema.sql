@@ -1,3 +1,16 @@
+-- main application schema
+create table main_application_raw_notifications (
+    id serial primary key,
+    triggered_by_user_id int not null,
+    notification_type varchar(255) not null,
+    notification_data jsonb not null,
+    in_app_group_key varchar(255) not null,
+    email_group_key varchar(255) not null,
+    batch_notification_id int not null,
+    created_at timestamp not null default now(),
+);
+
+-- notification service schema
 create table organizations (
     id serial primary key,
     name varchar(255) not null,
@@ -32,15 +45,14 @@ create table user_preferences (
     id serial primary key,
     user_id int not null,
     notification_type varchar(255) not null,
-    in_app_notifications boolean not null,
-    email_notifications boolean not null,
+    in_app_receiver boolean not null,
+    email_receiver boolean not null,
     foreign key (user_id) references users(id)
 );
 
 create table batch_notifications (
     id serial primary key,
     notification_id int not null,
-    foreign key (notification_id) references raw_notifications(id),
     created_at timestamp not null default now(),
     user_notifications_created_at timestamp 
 );
@@ -52,9 +64,11 @@ create table raw_notifications (
     notification_data jsonb not null,
     in_app_group_key varchar(255) not null,
     email_group_key varchar(255) not null,
+    batch_notification_id int not null,
     created_at timestamp not null default now(),
     foreign key (triggered_by_user_id) references users(id),
-    foreign key (notification_type_id) references notification_types(id)
+    foreign key (notification_type_id) references notification_types(id),
+    foreign key (batch_notification_id) references batch_notifications(id)
 );
 
 create table user_in_app_notifications (
