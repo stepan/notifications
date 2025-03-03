@@ -17,6 +17,17 @@ create table users (
 
 );
 
+create table notification_types (
+    id serial primary key,
+    name varchar(255) not null,
+    description varchar(255) not null,
+    in_app_template text not null,
+    email_subject_template text not null,
+    email_body_template text not null, 
+    in_app_group_debounce_duration int not null,
+    email_group_debounce_duration int not null
+);
+
 create table user_preferences (
     id serial primary key,
     user_id int not null,
@@ -24,16 +35,6 @@ create table user_preferences (
     in_app_notifications boolean not null,
     email_notifications boolean not null,
     foreign key (user_id) references users(id)
-);
-
-create table notification_types (
-    id serial primary key,
-    name varchar(255) not null,
-    in_app_template text not null,
-    email_subject_template text not null,
-    email_body_template text not null, 
-    in_app_group_debounce_duration int not null,
-    email_group_debounce_duration int not null
 );
 
 create table batch_notifications (
